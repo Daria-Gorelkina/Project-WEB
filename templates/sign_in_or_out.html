@@ -37,6 +37,14 @@
            <br>
         <br><a class="btn btn-info" href="/login">Войти</a><br>
     </p>
+    {% else %}
+      <div class="jumbotron">
+       <h1 align="center">CoolBlogs</h1>
+       <p align="center">Привет! Это CoolBlogs! Здесь можно вести свой блог!</p>
+  </div>
+    <p align="center">
+        <a class="btn btn-primary" href="/start" role="button">Открыть записи</a>
+    </p>
 
 {% endif %}{% endblock %}
 </main>

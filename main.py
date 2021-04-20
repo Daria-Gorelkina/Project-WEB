@@ -29,6 +29,12 @@ def start():
     return render_template("sign_in_or_out.html", title='CoolBlogs')
 
 
+@app.route("/main_s")
+def main_s():
+    db_sess = db_session.create_session()
+    return render_template("my_acc.html", title='CoolBlogs')
+
+
 @app.route("/start")
 def index():
     db_sess = db_session.create_session()
@@ -106,7 +112,7 @@ def add_news():
         current_user.news.append(news)
         db_sess.merge(current_user)
         db_sess.commit()
-        return redirect('/')
+        return redirect('/start')
     return render_template('news.html', title='Добавление новости',
                            form=form)
 
@@ -136,7 +142,7 @@ def edit_news(id):
             news.content = form.content.data
             news.is_private = form.is_private.data
             db_sess.commit()
-            return redirect('/')
+            return redirect('/start')
         else:
             abort(404)
     return render_template('news.html',
@@ -157,7 +163,7 @@ def news_delete(id):
         db_sess.commit()
     else:
         abort(404)
-    return redirect('/')
+    return redirect('/start')
 
 
 @app.errorhandler(404)
