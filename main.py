@@ -9,6 +9,9 @@ from forms.news import NewsForm
 from flask_login import LoginManager, login_user, login_required, logout_user, current_user
 from flask_restful import reqparse, abort, Api, Resource
 import news_resources
+import os
+from werkzeug.utils import secure_filename
+from werkzeug.datastructures import FileStorage
 
 app = Flask(__name__)
 api = Api(app)
@@ -62,7 +65,7 @@ def reqister():
         user = User(
             name=form.name.data,
             email=form.email.data,
-            about=form.about.data
+            about=form.about.data,
         )
         user.set_password(form.password.data)
         db_sess.add(user)
