@@ -1,3 +1,3 @@
-from requests import get
+text = input().split()
+print(''.join(text))
 
-print(get('http://127.0.0.1/api/v2/news').json())
