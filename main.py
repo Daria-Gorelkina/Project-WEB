@@ -1,4 +1,4 @@
-from flask import Flask, jsonify, render_template, redirect, request, make_response, session, abort
+from flask import Flask, jsonify, render_template, redirect, request, make_response, session, abort, redirect, url_for
 from data import db_session, news_api
 from data.users import User
 from data.news import News
@@ -28,29 +28,50 @@ def main():
 
 @app.route("/")
 def start():
-    # db_sess = db_session.create_session()
+    if current_user.is_authenticated :
+        return redirect(url_for('index'))
+
     return render_template("sign_in_or_out.html", title='CoolBlogs')
 
-
-@app.route("/main_s")
-def main_s():
-    db_sess = db_session.create_session()
-    return render_template("my_acc.html", title='CoolBlogs')
-
-
 @app.route("/start")
+@login_required
 def index():
     db_sess = db_session.create_session()
-    if current_user.is_authenticated:
-        news = db_sess.query(News).filter(
-            (News.user == current_user) | (News.is_private != True))
-    else:
-        news = db_sess.query(News).filter(News.is_private != True)
-    return render_template("index.html", news=news)
+    news = db_sess.query(News).filter(News.is_private != True).order_by(News.created_date.desc())
+    return render_template("index.html", title = 'CoolBlogs - лента новостей', news=news)
+
+
+@app.route("/authors")
+@login_required
+def authors():
+    db_sess = db_session.create_session()
+    users = db_sess.query(User).order_by(User.created_date)
+    return render_template("authors.html", title = 'CoolBlogs - наши авторы', users = users)
+
+@app.route("/main_s")
+@app.route("/main_s/<int:user_id>")
+@login_required
+def main_s(user_id = 0):
+
+    db_sess = db_session.create_session()
+    if user_id == 0 :
+        user = current_user
+        news = db_sess.query(News).filter(News.user == current_user)
+        title = 'моя страница'
+    else :
+        user = db_sess.query(User).filter(User.id == user_id).one()
+        news = db_sess.query(News).filter((News.user_id == user_id) & (News.is_private != True)).order_by(News.created_date.desc())
+        title = 'страница автора ' + user.name
+
+    return render_template("my_acc.html", title='CoolBlogs - ' + title, user = user, news = news)
 
 
 @app.route('/register', methods=['GET', 'POST'])
 def reqister():
+
+    if current_user.is_authenticated :
+        return redirect(url_for('index'))
+
     form = RegisterForm()
     if form.validate_on_submit():
         if form.password.data != form.password_again.data:
@@ -82,6 +103,9 @@ def load_user(user_id):
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
+    if current_user.is_authenticated:
+        return redirect(url_for('index'))
+
     form = LoginForm()
     if form.validate_on_submit():
         db_sess = db_session.create_session()
