@@ -7,59 +7,59 @@
           href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
           integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
           crossorigin="anonymous">
+    <link rel="stylesheet" href="https://getbootstrap.com/docs/4.0/examples/blog/blog.css">
     <title>{{title}}</title>
-         <style>
-            .row.content {height: 1500px}
-            body {
-                background: RGB(147, 189, 187);}
-                .row.content {height: auto;}
-                }
-            .container {
-                width: 100%;
-                max-width: 1024px;
-                padding: 0 15px;
-                margin: 0 auto;
-                color: RGB(147, 189, 200)
-                }
-            .col-1-3 {
-                width: 33.3333333333%;
-                float: left;
-                margin-left: 0 auto;
-                margin-right: 0 auto;
-                }
-            .container:after, .row:after {
-                content: "";
-                display: table;
-                clear: both;
-                }
-            .row {
-                margin-bottom: 15px;
-                }
-            .col-2-3 {
-                width: 66.6666666667%;
-                float: right;
-                margin-left: 0 auto;
-                margin-right: 0 auto;
-                }
-            .col-3-4 {
-                width: 60%
-                float: right;
-                }
-  </style>
 </head>
 <body>
-<header>
-    <nav class="navbar navbar-light bg-light">
-        <a class="navbar-brand" href="#">CoolBlogs</a>
-    {% if current_user.is_authenticated %}
-    <a class="navbar-brand" href="/logout">{{ current_user.name }}</a>
-{% endif %}
-    </nav>
+<div class="container">
+<header class="blog-header py-3">
+        <div class="row flex-nowrap justify-content-between align-items-center">
+          <div class="col-4 text-center">
+            <a class="blog-header-logo text-dark" href="/">CoolBlogs</a>
+          </div>
+          <div class="col-4 d-flex justify-content-end align-items-center">
+            {% if current_user.is_authenticated %}
+                <span class="text-muted mr-3">Привет, {{ current_user.name }}</span>
+                <a class="btn btn-sm btn-outline-secondary" href="/logout">Выйти</a>
+            {% else %}
+                <a class="btn btn-sm btn-outline-secondary" href="/login">Войти</a>
+            {% endif %}
+          </div>
+        </div>
 </header>
-<main role="main" class="container">
-    {% block content %}
 
-    {% endblock %}
+<main role="main" class="container">
+    {% if not current_user.is_authenticated %}
+        <div class="row mt-3">
+            <div class="col">
+                {% block auth %}
+
+                {% endblock %}
+            </div>
+        </div>
+    {% else %}
+    <div class="row">
+        <div class="col-2 blog-sidebar">
+            <ul class="nav flex-column p-3">
+              <li class="nav-item">
+                <a class="nav-link" href="/main_s">Моя страница</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="/authors">Авторы</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="/start">Лента</a>
+              </li>
+            </ul>
+        </div>
+        <div class="col-10 blog-main">
+            {% block content %}
+
+            {% endblock %}
+        </div>
+    </div>
+    {% endif %}
 </main>
+    </div>
 </body>
 </html>

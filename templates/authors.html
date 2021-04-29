@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1>Наши авторы</h1>
+<div class="card" style="width: 18rem;">
+  <ul class="list-group list-group-flush">
+      {% for user in users %}
+        <li class="list-group-item"><a href="/main_s/{{user.id}}">{{ user.name }}</a></li>
+      {% endfor %}
+  </ul>
+</div>
+{% endblock %}

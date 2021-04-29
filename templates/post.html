@@ -1,0 +1,25 @@
+<div class="card mb-2 mt-2 {% if item.is_private %}border-danger{% endif %}">
+  <div class="card-body">
+      <div class="row">
+          <div class="col-4">
+              <a href="/main_s/{{item.user.id}}">{{item.user.name}}</a><Br>
+              <img class="mr-3" src="{{item.user.avatar(100)}}" alt="">
+          </div>
+          <div class="col-8">
+            <h5 class="card-title mb-0">{{item.title}}</h5>
+            <small class="card-subtitle mb-2 text-muted"><i>создано {{item.created_date.strftime('%d.%m.%Y %H:%M:%S')}}</i></small>
+            <p class="card-text mt-3">{{item.content}}</p>
+            {% if current_user.is_authenticated and current_user == item.user %}
+                <div>
+                    <a href="/news/{{ item.id }}" class="col-2-3 btn btn-warning">Изменить</a>
+                    <a href="/news_delete/{{ item.id }}" class="col-2-3 btn btn-danger">Удалить</a>
+                </div>
+            {% endif %}
+          </div>
+      </div>
+  </div>
+</div>
+
+
+
+
