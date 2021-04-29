@@ -9,7 +9,7 @@
             <h5 class="card-title mb-0">{{item.title}}</h5>
             <small class="card-subtitle mb-2 text-muted"><i>создано {{item.created_date.strftime('%d.%m.%Y %H:%M:%S')}}</i></small>
             <p class="card-text mt-3">{{item.content}}</p>
-            {% if current_user.is_authenticated and current_user == item.user %}
+            {% if current_user == item.user %}
                 <div>
                     <a href="/news/{{ item.id }}" class="col-2-3 btn btn-warning">Изменить</a>
                     <a href="/news_delete/{{ item.id }}" class="col-2-3 btn btn-danger">Удалить</a>
