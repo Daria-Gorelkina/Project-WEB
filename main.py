@@ -12,10 +12,8 @@ import news_resources
 import os
 from werkzeug.utils import secure_filename
 from werkzeug.datastructures import FileStorage
-from flask_ngrok import run_with_ngrok
 
 app = Flask(__name__)
-run_with_ngrok(app)
 api = Api(app)
 login_manager = LoginManager()
 login_manager.init_app(app)
